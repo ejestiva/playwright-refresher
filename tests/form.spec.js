@@ -1,29 +1,25 @@
 import {test, expect} from '@playwright/test'
+import {FormPage} from '../pages/form.page.js'
 
 test('Fill out form', async({page})=>{
+    const formPage = new FormPage(page);
 
- // LOCATORS
-  const name = page.getByRole('textbox',{name: 'Full Name'})
-  const email = page.getByRole('textbox',{name: 'name@example.com'})
-  const currenntAddress =  page.getByRole('textbox',{name: 'Current Address'})
-  const permanentAddress = page.locator('#permanentAddress')
-  const submitButton = page.getByRole('button', {name: 'Submit'})
-  const output = page.locator('#output')
-
+ const user = {
+    name: 'Kai Sotto',
+    email: 'kaisottogilas@gmail.com',
+    currentAddress: 'Magarao',
+    permanentAddress: 'Naga City'
+ };
+ 
  // ACTIONS
-await page.goto('https://demoqa.com/text-box?');
-
-await name.fill('Kai Sotto');
-await email.fill('gilakaisotto@gmail.com');
-await currenntAddress.fill('Magarao');
-await permanentAddress.fill('Naga City');
-
-await submitButton.click();
+ await formPage.gotoPage();
+ await formPage.fillForm(user);
+ await formPage.clickSubmit();
 
  // ASSERTIONS
 
-await expect(output).toContainText('Kai Sotto');
-await expect(output).toContainText('gilakaisotto@gmail.com');
-await expect(output).toContainText('Magarao');
-await expect(output).toContainText('Naga City');
+await expect(formPage.output).toContainText('Kai Sotto');
+await expect(formPage.output).toContainText('kaisottogilas@gmail.com');
+await expect(formPage.output).toContainText('Magarao');
+await expect(formPage.output).toContainText('Naga City');
 })
